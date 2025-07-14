@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsa Orders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .lang-selector img.active {
+            box-shadow: 0 0 0 3px #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container mx-auto max-w-3xl my-5 md:my-10 p-5 bg-white rounded-2xl shadow-lg">
+        <!-- Language Selector -->
+        <div class="lang-selector flex justify-end items-center mb-6 space-x-3">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/1200px-Flag_of_Russia.svg.png" alt="Russian Flag" id="lang-ru" class="w-8 h-auto cursor-pointer rounded-md transition-all duration-200">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/1200px-Flag_of_the_United_States.svg.png" alt="English Flag" id="lang-en" class="w-8 h-auto cursor-pointer rounded-md transition-all duration-200">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Flag_of_Kyrgyzstan.svg/1200px-Flag_of_Kyrgyzstan.svg.png" alt="Kyrgyz Flag" id="lang-kg" class="w-8 h-auto cursor-pointer rounded-md transition-all duration-200">
+        </div>
+
+        <!-- Main Content -->
+        <header class="text-center mb-8">
+            <h1 id="welcome-title" class="text-3xl md:text-4xl font-bold text-gray-800"></h1>
+        </header>
+
+        <main>
+            <!-- Order Info Section -->
+            <div class="section bg-blue-50 p-6 rounded-xl mb-6">
+                <p id="individual-orders" class="text-lg text-blue-800 mb-2"></p>
+                <p id="delivery-info" class="text-lg text-blue-800"></p>
+            </div>
+
+            <!-- Fillings Section -->
+            <div class="section mb-6">
+                <h2 id="choose-filling" class="text-2xl font-semibold text-gray-700 border-b-2 border-gray-200 pb-2 mb-4"></h2>
+                <ul id="filling-list" class="space-y-3">
+                    <li id="filling-meat-potato" class="text-lg text-gray-600"></li>
+                    <li id="filling-meat-semi" class="text-lg text-gray-600"></li>
+                    <li id="filling-chicken" class="text-lg text-gray-600"></li>
+                    <li id="filling-spinach-cheese" class="text-lg text-gray-600"></li>
+                    <li id="filling-pumpkin" class="text-lg text-gray-600"></li>
+                </ul>
+            </div>
+
+            <!-- Price Section -->
+            <div class="section text-center my-8">
+                <p id="price" class="inline-block bg-green-100 text-green-800 text-2xl font-bold px-6 py-3 rounded-full"></p>
+            </div>
+
+            <!-- Sales Points Section -->
+            <div class="section mb-6">
+                <h2 id="sales-points-title" class="text-2xl font-semibold text-gray-700 border-b-2 border-gray-200 pb-2 mb-4"></h2>
+                <ul id="sales-points-list" class="space-y-3 list-disc list-inside"></ul>
+            </div>
+
+            <!-- Pickup Section -->
+            <div class="section mb-6">
+                <h2 id="pickup-title" class="text-2xl font-semibold text-gray-700 border-b-2 border-gray-200 pb-2 mb-4"></h2>
+                <p id="pickup-location" class="text-lg text-gray-600"></p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-8 pt-6 border-t-2 border-gray-200 text-center bg-gray-50 p-4 rounded-xl">
+            <p id="working-hours" class="text-md font-semibold text-gray-700"></p>
+            <p id="weekend-info" class="text-md font-semibold text-gray-700"></p>
+        </footer>
+    </div>
+
+    <script>
+        // --- DATA ---
+        // All translations are stored in this object.
+        const translations = {
+            ru: {
+                welcomeTitle: "Приветствуем Вас 🙂",
+                individualOrders: "🥟 Индивидуальные заказы от 20 штук",
+                deliveryInfo: "🚚 Доставка от 150 сом (в зависимости от района)",
+                chooseFilling: "Выберите начинку:",
+                fillingMeatPotato: "🥟 Мясо+картошка",
+                fillingMeatSemi: "🥟 Мясо (только полуфабрикат)",
+                fillingChicken: "🥟 С курицей",
+                fillingSpinachCheese: "🥟 Шпинат-Брынза",
+                fillingPumpkin: "🥟 С тыквой",
+                price: "💰 Цена: 65 сом / 1 шт.",
+                salesPointsTitle: "📍 ТОЧКИ ПРОДАЖ САМС",
+                salesPoints: [
+                    "🏬 Магазин «515» ул. Исанова 128Б",
+                    "🏬 Магазин «Коровка» Ул. Московская 156 / Ул. Исанова",
+                    "🏬 Магазин «НАШ» пр. Чынгыза Айтматова 97/1",
+                    "🏬 Кофейня «Кофе Ланч» ул. Калык Акиева 111 / ул. Рыскулова",
+                    "🏬 Кофейня «Фелиз Кофе» ул. Раззакова 32",
+                    "🏬 Кофейня «Фелиз Кофе» Моссовет",
+                    "🏬 Магазин «Юрта» ул. Касымалы Баялинова 15",
+                    "🏬 Магазин «Гранат» 3 мкр., Ул. Юнусалиева 141",
+                    "🏬 Магазин «Lemon» 6 мкр., 12Б",
+                    "🏬 Магазин «Триада», Асанбай"
+                ],
+                pickupTitle: "👣 Самовывоз",
+                pickupLocation: "11 мкр., 14/2",
+                workingHours: "✅ РАБОЧЕЕ ВРЕМЯ: 09:00 - 18:00",
+                weekendInfo: "❌ Суббота и воскресенье - выходные дни"
+            },
+            en: {
+                welcomeTitle: "Welcome 🙂",
+                individualOrders: "🥟 Individual orders from 20 pieces",
+                deliveryInfo: "🚚 Delivery from 150 som (depending on the area)",
+                chooseFilling: "Choose a filling:",
+                fillingMeatPotato: "🥟 Meat+potato",
+                fillingMeatSemi: "🥟 Meat (semi-finished only)",
+                fillingChicken: "🥟 With chicken",
+                fillingSpinachCheese: "🥟 Spinach-Bryndza",
+                fillingPumpkin: "🥟 With pumpkin",
+                price: "💰 Price: 65 som / 1 pc.",
+                salesPointsTitle: "📍 SAMSA SALES POINTS",
+                salesPoints: [
+                    "🏬 '515' Store, 128B Isanova St.",
+                    "🏬 'Korovka' Store, 156 Moskovskaya St. / Isanova St.",
+                    "🏬 'NASH' Store, 97/1 Chingiz Aitmatov Ave.",
+                    "🏬 'Coffee Lunch' Cafe, 111 Kalyk Akiev St. / Ryskulova St.",
+                    "🏬 'Feliz Coffee' Cafe, 32 Razzakova St.",
+                    "🏬 'Feliz Coffee' Cafe, Mossovet",
+                    "🏬 'Yurta' Store, 15 Kasymaly Bayalinov St.",
+                    "🏬 'Granat' Store, 3rd microdistrict, 141 Yunusalieva St.",
+                    "🏬 'Lemon' Store, 6th microdistrict, 12B",
+                    "🏬 'Triada' Store, Asanbay"
+                ],
+                pickupTitle: "👣 Self-pickup",
+                pickupLocation: "11th microdistrict, 14/2",
+                workingHours: "✅ WORKING HOURS: 09:00 - 18:00",
+                weekendInfo: "❌ Saturday and Sunday are days off"
+            },
+            kg: {
+                welcomeTitle: "Кош келиңиз 🙂",
+                individualOrders: "🥟 20 даанадан баштап жеке заказдар",
+                deliveryInfo: "🚚 Жеткирүү 150 сомдон башталат (районго жараша)",
+                chooseFilling: "Ичине салынганын тандаңыз:",
+                fillingMeatPotato: "🥟 Эт+картошка",
+                fillingMeatSemi: "🥟 Эт (жарым фабрикат гана)",
+                fillingChicken: "🥟 Тоок эти менен",
+                fillingSpinachCheese: "🥟 Шпинат-Брынза",
+                fillingPumpkin: "🥟 Ашкабак менен",
+                price: "💰 Баасы: 65 сом / 1 даана",
+                salesPointsTitle: "📍 САМСА САТУУЧУ ЖЕРЛЕР",
+                salesPoints: [
+                    "🏬 «515» дүкөнү, Исанов көч. 128Б",
+                    "🏬 «Коровка» дүкөнү, Москва көч. 156 / Исанов көч.",
+                    "🏬 «НАШ» дүкөнү, Чыңгыз Айтматов пр. 97/1",
+                    "🏬 «Кофе Ланч» кафеси, Калык Акиев көч. 111 / Рыскулов көч.",
+                    "🏬 «Фелиз Кофе» кафеси, Раззаков көч. 32",
+                    "🏬 «Фелиз Кофе» кафеси, Моссовет",
+                    "🏬 «Юрта» дүкөнү, Касымалы Баялинов көч. 15",
+                    "🏬 «Гранат» дүкөнү, 3-кичи район, Юнусалиев көч. 141",
+                    "🏬 «Lemon» дүкөнү, 6-кичи район, 12Б",
+                    "🏬 «Триада» дүкөнү, Асанбай"
+                ],
+                pickupTitle: "👣 Өзү алып кетүү",
+                pickupLocation: "11-кичи район, 14/2",
+                workingHours: "✅ ИШ УБАКТЫСЫ: 09:00 - 18:00",
+                weekendInfo: "❌ Ишемби жана жекшемби - эс алуу күндөрү"
+            }
+        };
+
+        // --- LOGIC ---
+        // This function updates the text content based on the selected language.
+        function setLanguage(lang) {
+            const content = translations[lang];
+
+            // Update all text elements with the content from the selected language
+            document.getElementById('welcome-title').innerText = content.welcomeTitle;
+            document.getElementById('individual-orders').innerText = content.individualOrders;
+            document.getElementById('delivery-info').innerText = content.deliveryInfo;
+            document.getElementById('choose-filling').innerText = content.chooseFilling;
+            document.getElementById('filling-meat-potato').innerText = content.fillingMeatPotato;
+            document.getElementById('filling-meat-semi').innerText = content.fillingMeatSemi;
+            document.getElementById('filling-chicken').innerText = content.fillingChicken;
+            document.getElementById('filling-spinach-cheese').innerText = content.fillingSpinachCheese;
+            document.getElementById('filling-pumpkin').innerText = content.fillingPumpkin;
+            document.getElementById('price').innerText = content.price;
+            document.getElementById('sales-points-title').innerText = content.salesPointsTitle;
+            
+            // Re-create the list of sales points
+            const salesPointsList = document.getElementById('sales-points-list');
+            salesPointsList.innerHTML = ''; // Clear existing list
+            content.salesPoints.forEach(point => {
+                const li = document.createElement('li');
+                li.className = "text-lg text-gray-600";
+                li.innerText = point.replace(/🏬\s*/, ''); // Remove the icon from the start of the string for cleaner list
+                salesPointsList.appendChild(li);
+            });
+
+            document.getElementById('pickup-title').innerText = content.pickupTitle;
+            document.getElementById('pickup-location').innerText = content.pickupLocation;
+            document.getElementById('working-hours').innerText = content.workingHours;
+            document.getElementById('weekend-info').innerText = content.weekendInfo;
+
+            // Update the active flag style
+            document.querySelectorAll('.lang-selector img').forEach(img => {
+                img.classList.remove('active');
+            });
+            document.getElementById(`lang-${lang}`).classList.add('active');
+        }
+
+        // --- EVENT LISTENERS ---
+        // Attach click events to the flag images.
+        document.getElementById('lang-ru').addEventListener('click', () => setLanguage('ru'));
+        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('lang-kg').addEventListener('click', () => setLanguage('kg'));
+
+        // --- INITIALIZATION ---
+        // Set the initial language to Russian when the page loads.
+        window.addEventListener('DOMContentLoaded', () => {
+            setLanguage('ru');
+        });
+    </script>
+
+</body>
+</html>
